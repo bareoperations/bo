@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bare Operations</title>
+    <style>
+        /* --- RESET & VARIABLES --- */
+        :root {
+            --bg-color: #050505;
+            --card-bg: #0c0c0c;
+            --text-main: #ffffff;
+            --text-muted: #a8a8a8;
+            --accent-green: rgb(252, 255, 90);
+            /* Acid Green */
+            --border-color: #222;
+            --font-main: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: var(--font-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: 0.3s;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        /* --- UTILITIES --- */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .text-green {
+            color: var(--accent-green);
+        }
+
+        .text-muted {
+            color: var(--text-muted);
+        }
+
+        .section-padding {
+            padding: 100px 0;
+        }
+
+        .section-label {
+            color: var(--accent-green);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            display: block;
+            font-weight: 600;
+        }
+
+        h2 {
+            font-size: 3rem;
+            line-height: 1.1;
+            margin-bottom: 60px;
+            font-weight: 700;
+            letter-spacing: -1px;
+        }
+
+        /* --- BUTTONS --- */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 14px 32px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-primary {
+            background-color: var(--accent-green);
+            color: black;
+            border: none;
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: white;
+            border: 1px solid #333;
+            margin-left: 10px;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--accent-green);
+        }
+
+        /* --- HEADER --- */
+        header {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            padding: 30px 0;
+            z-index: 1000;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-icon {
+            width: 20px;
+            height: 20px;
+            background: var(--accent-green);
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: black;
+            font-size: 10px;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 5px 5px 5px 30px;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-links a {
+            margin-right: 25px;
+            font-size: 0.85rem;
+            color: #ccc;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: white;
+        }
+
+        .nav-btn {
+            background: var(--accent-green);
+            color: black !important;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+            margin-right: 0 !important;
+        }
+
+        /* --- HERO --- */
+        .hero {
+            padding-top: 200px;
+            padding-bottom: 150px;
+            text-align: center;
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            position: relative;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(204, 255, 0, 0.1) 0%, rgba(0, 0, 0, 0) 70%);
+            z-index: -1;
+            filter: blur(60px);
+        }
+
+        .pill {
+            border: 1px solid #333;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #ccc;
+            display: inline-block;
+            margin-bottom: 30px;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .hero h1 {
+            font-size: 5rem;
+            line-height: 1.1;
+            margin-bottom: 25px;
+            font-weight: 800;
+            letter-spacing: -2px;
+        }
+
+        .hero p {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            max-width: 650px;
+            margin: 0 auto 50px auto;
+            line-height: 1.7;
+        }
+
+        /* --- SERVICES --- */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+        }
+
+        .service-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 50px;
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+            transition: border-color 0.3s;
+        }
+
+        .service-card:hover {
+            border-color: #333;
+        }
+
+        .service-icon {
+            width: 48px;
+            height: 48px;
+            background: #151515;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-green);
+            font-size: 1.2rem;
+            border: 1px solid #222;
+        }
+
+        .service-card h3 {
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        .service-card p {
+            color: var(--text-muted);
+            font-size: 1rem;
+            margin-bottom: 30px;
+            line-height: 1.7;
+        }
+
+        .check-list li {
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+            color: #ddd;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .check-list li::before {
+            content: '↗';
+            /* Using arrow as generic check mark per style */
+            color: var(--accent-green);
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+
+        /* --- PROCESS --- */
+        .process-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+            margin-top: 20px;
+            border-top: 1px solid #222;
+            padding-top: 60px;
+        }
+
+        .process-step h4 {
+            color: var(--accent-green);
+            /* Changed to green to match image */
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            font-family: monospace;
+            /* Monospace for numbers */
+        }
+
+        .process-step h5 {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: white;
+            font-weight: 600;
+        }
+
+        .process-step p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        /* --- ABOUT --- */
+        .about-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+
+        .about-stats {
+            display: flex;
+            gap: 60px;
+            margin-top: 60px;
+            border-top: 1px solid #222;
+            padding-top: 30px;
+        }
+
+        .stat-item h3 {
+            font-size: 2.5rem;
+            color: var(--accent-green);
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+
+        .stat-item p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .about-visual {
+            height: 450px;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            position: relative;
+            background: #000;
+            overflow: hidden;
+        }
+
+        /* CSS Abstract Art */
+        .line-art {
+            position: absolute;
+            width: 150%;
+            height: 150%;
+            top: -25%;
+            left: -25%;
+            background-image:
+                linear-gradient(45deg, #222 1px, transparent 1px),
+                linear-gradient(-45deg, #222 1px, transparent 1px),
+                linear-gradient(90deg, #222 1px, transparent 1px);
+            background-size: 40px 40px;
+            transform: rotate(15deg);
+            opacity: 0.5;
+        }
+
+        .line-accent {
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background: white;
+            top: 50%;
+            left: 0;
+            transform: rotate(25deg);
+            box-shadow: 0 0 10px white;
+        }
+
+        .line-accent-2 {
+            position: absolute;
+            width: 100%;
+            height: 1px;
+            background: #444;
+            top: 30%;
+            left: 0;
+            transform: rotate(-15deg);
+        }
+
+        /* --- REVIEWS --- */
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .testimonial-card {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 250px;
+        }
+
+        .testimonial-text {
+            font-size: 1rem;
+            color: #e0e0e0;
+            line-height: 1.6;
+        }
+
+        .client-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .client-initial {
+            width: 32px;
+            height: 32px;
+            background: #222;
+            border-radius: 50%;
+            color: #666;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .client-details h6 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .client-details span {
+            font-size: 0.75rem;
+            color: #666;
+        }
+
+        /* --- CONTACT --- */
+        .contact-container {
+            max-width: 500px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .contact-container h2 {
+            margin-bottom: 20px;
+        }
+
+        .contact-container p {
+            margin-bottom: 40px;
+        }
+
+        form {
+            text-align: left;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 0.75rem;
+            margin-bottom: 8px;
+            color: #888;
+            font-weight: 500;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            background: #0f0f0f;
+            border: 1px solid #222;
+            padding: 15px;
+            border-radius: 8px;
+            color: white;
+            font-family: inherit;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+
+        input:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--accent-green);
+            background: #151515;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: var(--accent-green);
+            color: black;
+            font-weight: 700;
+            padding: 16px;
+            border: none;
+            border-radius: 50px;
+            margin-top: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: 0.3s;
+        }
+
+        .submit-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            padding: 60px 0;
+            margin-top: 80px;
+            color: #444;
+            font-size: 0.85rem;
+            border-top: 1px solid #111;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-links a {
+            color: #666;
+            margin-left: 20px;
+        }
+
+        .footer-links a:hover {
+            color: #999;
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 900px) {
+            .hero h1 {
+                font-size: 3.5rem;
+            }
+
+            .process-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .about-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+
+            nav .nav-links {
+                display: none;
+            }
+
+            /* Simplified mobile */
+            .logo {
+                font-size: 1.2rem;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .process-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+
+            .section-padding {
+                padding: 60px 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <span class="logo-icon"></span>Bare Operations
+                </div>
+                <div class="nav-links">
+                    <a href="https://cal.com/bare-operations-x7lysz/30min" class="nav-btn">Book a call</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <div class="pill"> A.I. consultancy </div>
+            <h1>Your business,<br> <span class="text-green">Accelerate.</span></h1>
+            <p> We help small and medium businesses find operational gaps through
+                sharp audits then implement AI tools that save real time and money. </p>
+            <div class="hero-btns">
+                <button class="btn btn-primary"> <a href="https://cal.com/bare-operations-x7lysz/30min">Book a discovery
+                        call &rarr;</a></button>
+                <button class="btn btn-secondary"> See what we do &darr;</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-padding">
+        <div class="container">
+            <span class="section-label">Services</span>
+            <h2>Two services. One clear<br>outcome.</h2>
+
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">&ndash;</div>
+                    <h3> Business Audit</h3>
+                    <p> A thorough review of your operations workflows and costs. We identify where you are leaking time
+                        and money so you can act with precision.
+                    </p>
+                    <ul class="check-list">
+                        <li> Process and workflow </li>
+                        <li> Cost and efficiency analysis </li>
+                        <li> Bottleneck identification </li>
+                        <li> Prioritized action report </li>
+                    </ul>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">&and;</div>
+                    <h3>AI Implementation</h3>
+                    <p> No hype - just practical AI tools embedded into your existing stack. From automations to
+                        LLM-powered assiatants, tailored for your team's reality. </p>
+                    <ul class="check-list">
+                        <li> Tool selection and road map </li>
+                        <li> Workflow automation setup </li>
+                        <li> Team onboarding and training </li>
+                        <li> Ongoing optimization </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-padding">
+        <div class="container">
+            <span class="section-label"> How it works </span>
+            <h2>Simple. Structured. No<br>fluff.</h2>
+
+            <div class="process-grid">
+                <div class="process-step">
+                    <h4>01</h4>
+                    <h5>Discovery Call</h5>
+                    <p> A free 30-minute conversation to understand your business, current challenges and where you want
+                        to be.</p>
+                </div>
+                <div class="process-step">
+                    <h4>02</h4>
+                    <h5> Deep audit </h5>
+                    <p> We go hands on with your workflows tools, and data to produce a clear prioritized of what to fix
+                        first.</p>
+                </div>
+                <div class="process-step">
+                    <h4>03</h4>
+                    <h5> AI Road map </h5>
+                    <p> A practical plan - not a theory deck - showing exactly which AI tools to deploy and how they fit
+                        your team.</p>
+                </div>
+                <div class="process-step">
+                    <h4>04</h4>
+                    <h5> Implementation </h5>
+                    <p> We build, test and embed the solutions with your team, ensuring adoption and measurable results.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="section-padding">
+        <div class="container">
+            <span class="section-label">About</span>
+            <div class="about-layout">
+                <div class="about-text">
+                    <h2>One consultant.<br>Full accountability.</h2>
+                    <p class="text-muted"> We are an AI consultancy with a background in operations and applied AI. When
+                        you work with us there's no account manager relay. You get direct access to a person actually
+                        doing the work.</p>
+                    <br>
+                    <p class="text-muted">Our clients are founders and OPS at SMBS who are serious about running a
+                        leaner, smarter businesses.</p>
+
+                    <div class="about-stats">
+                        <div class="stat-item">
+                            <h3>15+</h3>
+                            <p> Businesses Audited</p>
+                        </div>
+                        <div class="stat-item">
+                            <h3>3x</h3>
+                            <p> Average efficiency gain</p>
+                        </div>
+                        <div class="stat-item">
+                            <h3>2 yrs</h3>
+                            <p>A.I Experience</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-visual">
+                    <div class="line-art"></div>
+                    <div class="line-accent"></div>
+                    <div class="line-accent-2"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-padding">
+        <div class="container">
+            <span class="section-label">Results</span>
+            <h2>What clients say.</h2>
+
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <p class="testimonial-text">" The audit alone was worth every penny. Within two weeks we had a clear
+                        picture of where our OPS were bleeding time. The AI tools we implemented since have saved us 15+
+                        hours a week"</p>
+                    <div class="client-info">
+                        <div class="client-initial">S</div>
+                        <div class="client-details">
+                            <h6>Sarah Jenkins</h6>
+                            <span>Owner, TechStart</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <p class="testimonial-text">" No buzz words no over just a practical plan and clean execution. Our
+                        team actually uses the tools which says everything."</p>
+                    <div class="client-info">
+                        <div class="client-initial">M</div>
+                        <div class="client-details">
+                            <h6>Mark D.</h6>
+                            <span>Founder, ScaleUp</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <p class="testimonial-text">" I was skeptical about AI for our size of business, now I can't imagine
+                        running without the automations we built together ROI in under 60 days"</p>
+                    <div class="client-info">
+                        <div class="client-initial">E</div>
+                        <div class="client-details">
+                            <h6>Elena R.</h6>
+                            <span>Director, MediaCo</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-padding">
+        <div class="container contact-container">
+            <span class="section-label">Contact</span>
+            <h2>Ready to start?</h2>
+            <p class="text-muted">Book a call or fill out the form below.</p>
+
+            <form>
+                <div class="form-row">
+                    <div class="input-group">
+                        <label>Name</label>
+                        <input type="text" placeholder="John Doe">
+                    </div>
+                    <div class="input-group">
+                        <label>Email</label>
+                        <input type="email" placeholder="john@company.com">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Message</label>
+                    <textarea rows="4" placeholder="Tell us about your project..."></textarea>
+                </div>
+                <button class="submit-btn">Send Message</button>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container footer-content">
+            <div class="logo">
+                <span class="logo-icon">A</span> Bare Operations
+            </div>
+            <div>
+                &copy; 2026 Bare Operations
+            </div>
+        </div>
+    </footer>
+
+</body>
+
+</html>
